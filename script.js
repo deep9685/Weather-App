@@ -103,14 +103,19 @@ function renderWeatherInfo(weatherInfo) {
     const cloudiness = document.querySelector("[data-cloudiness]");
 
     //fetch values from weatherInfo object and put it on UI elements
+    if(weatherInfo?.cod == "404")
+    {
+        alert("city not found")
+        return;
+    }
     cityName.innerText = weatherInfo?.name;
     countryIcon.src = `https://flagcdn.com/144x108/${weatherInfo?.sys?.country.toLowerCase()}.png`;
     desc.innerText = weatherInfo?.weather?.[0]?.description;
     weatherIcon.src = `http://openweathermap.org/img/w/${weatherInfo?.weather?.[0]?.icon}.png`;
-    temp.innerText = weatherInfo?.main?.temp;
-    windspeed.innerText = weatherInfo?.wind?.speed;
-    humidity.innerText = weatherInfo?.main?.humidity;
-    cloudiness.innerText = weatherInfo?.clouds?.all;
+    temp.innerText = `${weatherInfo?.main?.temp} °F`;
+    windspeed.innerText = `${weatherInfo?.wind?.speed}m/s`;
+    humidity.innerText = `${weatherInfo?.main?.humidity}%`;
+    cloudiness.innerText = `${weatherInfo?.clouds?.all}%`;
 
 }
 
@@ -152,7 +157,7 @@ searchForm.addEventListener("submit", (e) => {
 
 async function fetchSearchWeatherInfo(city) {
     loadingScreen.classList.add("active");
-    userContainer.classList.remove("active");
+    userInfoContainer.classList.remove("active");
     grantAccessContainer.classList.remove("active");
 
     try{
